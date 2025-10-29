@@ -1,22 +1,15 @@
 import { z } from "zod";
-import { procedure, router } from "../trpc";
-import { TRPCError } from "@trpc/server";
+import { router, protectedProcedure } from "../trpc";
 
 export const appRouter = router({
-  hello: procedure
+  hello: protectedProcedure
     .input(
       z.object({
         text: z.string(),
       })
     )
     .query((opts) => {
-      if (!opts.input.text) {
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Text is required",
-        });
-      }
-
+      console.log({ dbUser: opts.ctx.user });
       return {
         greeting: `hello ${opts.input.text}`,
       };

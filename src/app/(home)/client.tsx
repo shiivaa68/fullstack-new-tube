@@ -3,9 +3,7 @@
 import { trpc } from "@/utils/trpc";
 
 export const PageClient = () => {
-
-  // const { data } = trpc.hello.useQuery({ text: "antonio" });
-  const  [data] = trpc.hello.useSuspenseQuery({ text: "shive cleint" });
+  const [data] = trpc.hello.useSuspenseQuery({ text: "shive cleint" });
 
   return (
     <div>

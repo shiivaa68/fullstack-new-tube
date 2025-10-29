@@ -1,32 +1,29 @@
-// import { serverClient } from "@/utils/trpc-server";
-import { HydrateClient } from "@/providers/hydrate-client";
-// import { QueryClient, dehydrate } from "@tanstack/react-query";
-import { PageClient } from "./client";
-import { ErrorBoundary } from "react-error-boundary";
-import { Suspense } from "react";
+"use client";
+
 import { trpc } from "@/utils/trpc";
+import { ClerkLoaded, useUser } from "@clerk/nextjs";
+import { Suspense } from "react";
 
-export default async function Home() {
-  // const queryClient = new QueryClient();
+export default function Home() {
+  return (
+    <ClerkLoaded>
+      <AuthenticatedContent />
+    </ClerkLoaded>
+  );
+}
 
-  // Fetch server-side
-  // const data = await serverClient.hello.query({ text: "Shiva" });
+function AuthenticatedContent() {
+  const { isSignedIn } = useUser();
 
-  //
-  void trpc.hello?.usePrefetchQuery({ text: "anntonio" });
+  const query = trpc.hello.useQuery({ text: "Shiva" }, { enabled: isSignedIn });
 
-  // queryClient.setQueryData(["hello", { text: "Shiva" }], data);
-
-  // const dehydratedState = dehydrate(queryClient);
+  if (!isSignedIn) {
+    return <div>Please sign in to see this content</div>;
+  }
 
   return (
-    <HydrateClient>
-      <Suspense fallback={<p>loading...</p>}>
-        {/* <div>Server fetched: {data.greeting}</div> */}
-        <ErrorBoundary fallback={<p>error...</p>}>
-          <PageClient />
-        </ErrorBoundary>
-      </Suspense>
-    </HydrateClient>
+    <Suspense fallback={<p>Loading...</p>}>
+      <div>Server fetched (client-side): {query.data?.greeting}</div>
+    </Suspense>
   );
 }
