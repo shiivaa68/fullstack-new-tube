@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
-import { TRPCWrapper } from "@/providers/trpc-wrapper";
+import { TRPCProvider } from "@/trpc/client";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +18,7 @@ export default function RootLayout({
     <ClerkProvider afterSignOutUrl="/">
       <html lang="en">
         <body className={inter.className}>
-          <TRPCWrapper>{children}</TRPCWrapper>
+          <TRPCProvider>{children}</TRPCProvider>
         </body>
       </html>
     </ClerkProvider>

@@ -1,13 +1,10 @@
 "use client";
-
-import { trpc } from "@/utils/trpc";
+import { trpc } from "@/trpc/client";
 
 export const PageClient = () => {
-  const [data] = trpc.hello.useSuspenseQuery({ text: "shive cleint" });
-
-  return (
-    <div>
-      Page Client says: {data?.greeting}
-    </div>
-  );
+  const [data] = trpc.hello.useSuspenseQuery({
+    text: "shive",
+  });
+  if (!data.greeting) return <div>Loading...</div>;
+  return <div>page client says : {data.greeting}</div>;
 };
