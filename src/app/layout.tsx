@@ -15,7 +15,9 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <ClerkProvider afterSignOutUrl="/">
+    <ClerkProvider
+      afterSignOutUrl="/"
+    >
       <html lang="en">
         <body className={inter.className}>
           <TRPCProvider>{children}</TRPCProvider>
