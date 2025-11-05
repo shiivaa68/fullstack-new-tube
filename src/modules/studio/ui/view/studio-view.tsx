@@ -1,9 +1,15 @@
-import { VideoSection } from "../sections/video-section"
+import { VideoSection } from "../sections/video-section";
 
-export const StudioView =()=>{
-  return(
-    <div>
-      <VideoSection/>
+export const StudioView = () => {
+  return (
+    <div className="flex flex-col gap-y-6 pt-2.5">
+      <div className="px-4">
+        <h1 className="text-2xl font-bold">channel content</h1>
+        <p className="text-xs text-muted-foreground">
+          manage your channel content and video
+        </p>
+      </div>
+      <VideoSection />
     </div>
-  )
-}
+  );
+};
