@@ -10,7 +10,7 @@ import superjson from "superjson";
 
 export const createTRPCContext = cache(async () => {
   const { userId } = await auth();
-  console.log(userId, "iam in the createTRPCContext");
+  console.log(userId, "i am in the createTRPCContext");
   return { userId };
 });
 
@@ -35,12 +35,10 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
     .where(eq(users.clerkId, ctx.userId))
     .limit(1);
 
-    
   if (!user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
     console.log(user, "user doest exist");
   }
-  
 
   const { success } = await ratelimit.limit(user.id);
   console.log(success, "into success");
@@ -57,33 +55,3 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
     },
   });
 });
-
-// export const protectedProcedure = t.procedure.use(async function isAuthed(
-//   opts
-// ) {
-//   const { ctx } = opts;
-//   if (!ctx.userId) {
-//     throw new TRPCError({ code: "UNAUTHORIZED" });
-//   }
-
-//   const [user] = await db
-//     .select()
-//     .from(users)
-//     .where(eq(users.clerkId, ctx.userId))
-//     .limit(1);
-//   if (!user) {
-//     throw new TRPCError({ code: "UNAUTHORIZED" });
-//   }
-
-//   const { success } = await ratelimit.limit(user.id);
-//   if (!success) {
-//     throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
-//   }
-
-//   return opts.next({
-//     ctx: {
-//       ...ctx,
-//       user,
-//     },
-//   });
-// });
