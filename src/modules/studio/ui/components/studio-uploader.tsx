@@ -15,13 +15,14 @@ interface StudioUpLoaderProps {
 const UPLOADER_ID = "video-uploader";
 export const StudioUploader = ({
   endpoint,
+  onSuccess,
 }: // onSuccess,
 StudioUpLoaderProps) => {
   return (
     <div>
       <MuxUploader
         endpoint={endpoint}
-        // onSuccess={onSuccess}
+        onSuccess={onSuccess}
         id={UPLOADER_ID}
         className="hidden group/uploader"
       />
