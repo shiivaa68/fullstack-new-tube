@@ -5,18 +5,27 @@ import { trpc } from "@/trpc/client";
 import { Loader2Icon, PlusIcon } from "lucide-react";
 import { toast } from "sonner";
 import { StudioUploader } from "./studio-uploader";
+import { useRouter } from "next/navigation";
 
 export const StudioUploadModal = () => {
+  const utils = trpc.useUtils();
+  const router = useRouter();
   const create = trpc.videos.create.useMutation({
     onSuccess: () => {
       toast.success("video created");
       utils.studio.getMany.invalidate();
     },
     onError: () => {
-      toast.error("sth went wrong");
+      toast.error("sth went wrong in uploading video");
     },
   });
-  const utils = trpc.useUtils();
+
+  const onSuccess = () => {
+    if (!create.data?.video.id) return;
+    create.reset();
+    router.push(`/studio/videos/${create.data.video.id}`);
+  };
+
   return (
     <>
       <ResponsiveModal
@@ -24,8 +33,8 @@ export const StudioUploadModal = () => {
         open={!!create.data?.url}
         onOpenChange={() => create.reset()}
       >
-        {create.data ? (
-          <StudioUploader endpoint={create.data.url} onSuccess={() => {}} />
+        {create.data?.url ? (
+          <StudioUploader endpoint={create.data.url} onSuccess={onSuccess} />
         ) : (
           <Loader2Icon />
         )}
