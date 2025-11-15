@@ -8,6 +8,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Skeleton } from "@/components/ui/skeleton";
 import { THUMBNAIL_FALLBACK } from "@/modules/videos/constants";
 import {
   DropdownMenu,
@@ -51,6 +52,7 @@ import { snakeCaseToTitle } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { ThumbnailUploadModal } from "./thumbnail-upload-modal";
+import { ThumbnailGenerateModal } from "./thumbnail-generate-modal";
 
 interface FormSectionProps {
   videoId: string;
@@ -67,13 +69,29 @@ export const FormSection = ({ videoId }: FormSectionProps) => {
 };
 
 const FormSectionSkeleton = () => {
-  return <p>Loading...</p>;
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-6">
+        <div className="space-y-2">
+          <Skeleton className="h-7 w-32" />
+          <Skeleton className="h-7 w-32" />
+        </div>
+        <Skeleton className="h-9 w-24" />
+      </div>
+      <div>
+        
+      </div>
+    </div>
+  );
 };
 
 export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
   const utils = trpc.useUtils();
   const router = useRouter();
   const [thumbnailModalOpen, setThumbnailModalOpen] = useState(false);
+  const [thumbnailGenerateModalOpen, setThumbnailGenerateModalOpen] =
+    useState(false);
+
   const { data: video } = trpc.studio.getOne.useQuery({ id: videoId });
   const { data: categories } = trpc.categories.getMany.useQuery();
 
@@ -101,22 +119,12 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
       toast.error("something went wrong in restore");
     },
   });
-  const generateThumbnail = trpc.videos.generateThumbnail.useMutation({
-    onSuccess: () => {
-      toast.success("background job started", {
-        description: "this may take some time ",
-      });
-    },
-    onError: () => {
-      toast.error("something went wrong in restore");
-    },
-  });
+
   const generateTitle = trpc.videos.generateTitle.useMutation({
     onSuccess: () => {
       toast.success("background job started", {
         description: "this may take some time ",
       });
-      
     },
     onError: () => {
       toast.error("something went wrong in restore");
@@ -172,6 +180,11 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
 
   return (
     <>
+      <ThumbnailGenerateModal
+        open={thumbnailGenerateModalOpen}
+        onOpenChange={setThumbnailGenerateModalOpen}
+        videoId={videoId}
+      />
       <ThumbnailUploadModal
         open={thumbnailModalOpen}
         onOpenChange={setThumbnailModalOpen}
@@ -323,7 +336,7 @@ export const FormSectionSuspense = ({ videoId }: FormSectionProps) => {
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               onClick={() =>
-                                generateThumbnail.mutate({ id: videoId })
+                                setThumbnailGenerateModalOpen(true)
                               }
                             >
                               <SparkleIcon className="size-4 mr-1" />
