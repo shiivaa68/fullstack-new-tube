@@ -38,7 +38,7 @@ export const POST = async (request: Request) => {
   const body = JSON.stringify(payload);
 
   if (process.env.NODE_ENV === "development") {
-    console.log("Skipping verification");
+    // console.log("Skipping verification");
   } else {
     mux.webhooks.verifySignature(
       body,

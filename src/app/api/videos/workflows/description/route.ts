@@ -61,7 +61,8 @@ export const { POST } = serve(async (context) => {
 
   const description = body.choices[0]?.message.content;
   if (!description) {
-    throw new Error("bad request");
+    console.log("Full body returned:", body);
+  throw new Error("OpenAI returned an unexpected format in description");
   }
   await context.run("update-step", async () => {
     await db

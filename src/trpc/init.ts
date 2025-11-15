@@ -10,7 +10,7 @@ import superjson from "superjson";
 
 export const createTRPCContext = cache(async () => {
   const { userId } = await auth();
-  console.log(userId, "i am in the createTRPCContext");
+  // console.log(userId, "i am in the createTRPCContext");
   return { userId };
 });
 
@@ -28,7 +28,7 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
   if (!ctx.userId) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
-  console.log(ctx.userId, "i am inside the protectedprocedure");
+  // console.log(ctx.userId, "i am inside the protectedprocedure");
   const [user] = await db
     .select()
     .from(users)
@@ -37,17 +37,17 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
 
   if (!user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
-    console.log(user, "user doest exist");
+    // console.log(user, "user doest exist");
   }
 
   const { success } = await ratelimit.limit(user.id);
-  console.log(success, "into success");
+  // console.log(success, "into success");
   if (!success) {
     throw new TRPCError({ code: "TOO_MANY_REQUESTS" });
   }
 
-  console.log(ctx, "ctx");
-  console.log(user, "user");
+  // console.log(ctx, "ctx");
+  // console.log(user, "user");
   return next({
     ctx: {
       ...ctx,

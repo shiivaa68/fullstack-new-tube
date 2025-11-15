@@ -19,14 +19,14 @@ const categoryNames = [
 ];
 
 async function main() {
-  console.log("Seeding categories...");
+  // console.log("Seeding categories...");
   try {
     const values = categoryNames.map((name) => ({
       name,
       description: `videos related to ${name.toLowerCase()}`,
     }));
     await db.insert(categories).values(values);
-    console.log("categories seeded successfully!");
+    // console.log("categories seeded successfully!");
   } catch (error) {
     console.error("Error seeding categories:", error);
     process.exit(1);

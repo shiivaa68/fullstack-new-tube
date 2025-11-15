@@ -20,10 +20,10 @@ export const studioRouter = createTRPCRouter({
       //     eq(videos.id, id),
       //     or(eq(videos.userId, userId), eq(videos.visibility, "public"))
       //   )
-      // );
-      console.log(videos, "videos in get one ");
-      console.log("getOne called", { userId, id });
-      console.log("ctx.user", ctx.user);
+      // // );
+      // console.log(videos, "videos in get one ");
+      // console.log("getOne called", { userId, id });
+      // console.log("ctx.user", ctx.user);
 
       if (!video) {
         throw new TRPCError({ code: "NOT_FOUND" });

@@ -66,9 +66,12 @@ export const { POST } = serve(async (context) => {
     },
   });
 
+  // const title = body.choices[0]?.message.content;
   const title = body.choices[0]?.message.content;
+
   if (!title) {
-    throw new Error("bad request");
+    console.log("Full body returned:", body);
+    throw new Error("OpenAI returned an unexpected format in title route");
   }
   await context.run("update-step", async () => {
     await db

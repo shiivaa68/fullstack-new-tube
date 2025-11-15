@@ -43,11 +43,11 @@ export async function POST(req: Request) {
     });
   }
 
-  console.log("✅ Verified Clerk Webhook:", evt.type);
+  // console.log("✅ Verified Clerk Webhook:", evt.type);
 
   const eventType = evt.type;
 
-  console.log("webhook playload", body);
+  // console.log("webhook playload", body);
 
   if (eventType === "user.created") {
     const { data } = evt;
